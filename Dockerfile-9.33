@@ -54,8 +54,8 @@ RUN set -ex \
   && add-apt-repository 'deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main' \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
-  libpq-dev \
-  build-essential
+    libpq-dev \
+  && rm -r /var/lib/apt/lists/*
 
 RUN cpanm DBD::Pg Mojo::Pg \
   && rm -r /root/.cpanm
