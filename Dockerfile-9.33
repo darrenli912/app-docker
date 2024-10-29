@@ -17,9 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   software-properties-common \
   dirmngr \
   cpanminus \
-  curl \
   build-essential \
-  gnupg \
   libcpanel-json-xs-perl  \
   libdbi-perl  \
   libev-perl  \
