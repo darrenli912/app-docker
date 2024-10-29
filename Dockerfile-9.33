@@ -18,10 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   dirmngr \
   cpanminus \
   curl \
-  gcc \
+  build-essential \
   gnupg \
-  vim \
-  make \
   libcpanel-json-xs-perl  \
   libdbi-perl  \
   libev-perl  \
@@ -33,8 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   librole-tiny-perl  \
   libsql-abstract-perl  \
   libpq-dev \
-  libdbd-pg-perl \
-  build-essential
+  libdbd-pg-perl
 
 ENV MOJO_VERSION 9.33
 RUN cpanm Mojolicious@"$MOJO_VERSION" \
