@@ -32,33 +32,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libnet-dns-native-perl  \
   librole-tiny-perl  \
   libsql-abstract-perl  \
+  libpq-dev \
   && rm -r /var/lib/apt/lists/* 
 
 ENV MOJO_VERSION 9.33
 
 RUN cpanm Mojolicious@"$MOJO_VERSION" \
-  && rm -r /root/.cpanm
-
-RUN set -ex \
-  && export GNUPGHOME="$(mktemp -d)" \
-  && for key in \
-    B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
-  ; do \
-    gpg --batch --keyserver hkp://keys.opengpg.org --recv-keys "$key" || \
-    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" || \
-    gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ; \
-  done \
-  && gpg --batch --export B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 > /etc/apt/trusted.gpg.d/pg.gpg \
-  && command -v gpgconf > /dev/null && gpgconf --kill all \
-  && rm -rf "$GNUPGHOME" \
-  && add-apt-repository 'deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main' \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends \
-    libpq-dev \
-  && rm -r /var/lib/apt/lists/*
-
-RUN cpanm DBD::Pg Mojo::Pg \
-  && rm -r /root/.cpanm
+  DBD::Pg \
+  Mojo::Pg \
+ && rm -r /root/.cpanm
 
 RUN apt-get install -y --no-install-recommends \
   libauthen-sasl-perl \
