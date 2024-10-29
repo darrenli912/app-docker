@@ -1,0 +1,121 @@
+ARG IMAGE=debian
+ARG TAG=bullseye-slim
+FROM ${IMAGE}:${TAG}
+
+WORKDIR /usr/src/app
+EXPOSE 3000 8080
+
+ARG USERNAME=perl
+ARG USER_UID
+ARG USER_GID
+
+
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd --uid $USER_UID --gid $USERNAME --shell /bin/bash --create-home $USERNAME
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  software-properties-common \
+  dirmngr \
+  cpanminus \
+  curl \
+  gcc \
+  gnupg \
+  vim \
+  make \
+  libcpanel-json-xs-perl  \
+  libdbi-perl  \
+  libev-perl  \
+  libfuture-asyncawait-perl  \
+  libio-socket-socks-perl  \
+  libnet-ssleay-perl  \
+  libio-socket-ssl-perl  \
+  libnet-dns-native-perl  \
+  librole-tiny-perl  \
+  libsql-abstract-perl  \
+  && rm -r /var/lib/apt/lists/* 
+
+ENV MOJO_VERSION 9.33
+
+RUN cpanm Mojolicious@"$MOJO_VERSION" \
+  && rm -r /root/.cpanm
+
+RUN set -ex \
+  && export GNUPGHOME="$(mktemp -d)" \
+  && for key in \
+    B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
+  ; do \
+    gpg --batch --keyserver hkp://keys.opengpg.org --recv-keys "$key" || \
+    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" || \
+    gpg --batch --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ; \
+  done \
+  && gpg --batch --export B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 > /etc/apt/trusted.gpg.d/pg.gpg \
+  && command -v gpgconf > /dev/null && gpgconf --kill all \
+  && rm -rf "$GNUPGHOME" \
+  && add-apt-repository 'deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main' \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+  libpq-dev \
+  build-essential
+
+RUN cpanm DBD::Pg Mojo::Pg \
+  && rm -r /root/.cpanm
+
+RUN apt-get install -y --no-install-recommends \
+  libauthen-sasl-perl \
+  libnet-ssh2-perl \
+  libgd-dev \
+  libgd-perl \
+  libio-socket-ssl-perl \
+  libemail-valid-perl \
+  libexcel-writer-xlsx-perl \
+  libemail-address-list-perl \
+  libemail-mime-perl \
+  libemail-valid-perl \
+  libemail-sender-perl \
+  libmail-imapclient-perl \
+  libencode-hanextra-perl \
+  libgeo-ip-perl \
+  libdomain-publicsuffix-perl \
+  libauthen-sasl-perl \
+  libhtml-scrubber-perl \
+  libdatetime-perl \
+  libdatetime-format-pg-perl \
+  libmojolicious-plugin-assetpack-perl \
+  libmojolicious-plugin-authentication-perl  \
+  libemail-sender-perl \
+  libhttp-browserdetect-perl \
+  libuniversal-require-perl \
+  libnet-scp-expect-perl  \
+  libcss-minifier-perl \
+  libjavascript-minifier-perl \
+  libgd-securityimage-perl   \
+  libemail-address-list-perl \
+  libcss-minifier-xs-perl \
+  libmime-tools-perl \
+  libclone-perl \
+  graphicsmagick \
+  graphicsmagick-imagemagick-compat \
+  libgraphics-magick-perl \
+  libcrypt-openssl-rsa-perl \
+  && rm -r /var/lib/apt/lists/* 
+
+RUN cpanm   \
+  Mojolicious::Plugin::RemoteAddr \
+  Module::Pluggable@5.2 \
+  Email::Sender::Simple \
+  Encode::Detect::Detector \
+  Mojolicious::Plugin::Minion \
+  WWW::Crawler::Mojo \
+  Mojolicious::Plugin::Captcha  \
+  Mojolicious::Plugin::Restify \
+  Mojolicious::Plugin::Cron \
+  Crypt::Mode::CBC \
+  Algorithm::HowSimilar \
+  CSS::Sass \
+  Mojo::JWT::Google  \
+  Authen::SASL  \
+  && rm -r /root/.cpanm
+
+  ARG NOW=not-set
+
+CMD ["/bin/bash", "-c"]
