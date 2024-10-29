@@ -36,10 +36,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -r /var/lib/apt/lists/* 
 
 ENV MOJO_VERSION 9.33
+RUN cpanm DBD::Pg \
+ && rm -r /root/.cpanm
+
 
 RUN cpanm Mojolicious@"$MOJO_VERSION" \
-  DBD::Pg \
-  Mojo::Pg \
+  DBD::Pg Mojo::Pg \
  && rm -r /root/.cpanm
 
 RUN apt-get install -y --no-install-recommends \
