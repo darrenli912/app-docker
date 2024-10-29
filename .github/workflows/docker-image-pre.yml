@@ -1,0 +1,20 @@
+name: GENERATE APP IMAGE 9.33
+
+on:
+  [workflow_dispatch]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the APP Docker image
+      run: docker build . --file Dockerfile-9.33 --tag darrenli912/gtt:9.33
+    - name: Push image to docker hub
+      run: |
+        docker login -u ${{ secrets.DOCKER_ACCOUNT }} -p ${{ secrets.DOCKER_TOKEN }}
+        docker push darrenli912/gtt:9.33
+
