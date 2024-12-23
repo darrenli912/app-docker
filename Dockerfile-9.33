@@ -62,8 +62,7 @@ RUN apt-get install -y --no-install-recommends \
   libhttp-browserdetect-perl \
   libuniversal-require-perl \
   libnet-scp-expect-perl  \
-  libcss-minifier-perl \
-  libjavascript-minifier-perl \
+  libjavascript-minifier-xs-perl \
   libgd-securityimage-perl   \
   libemail-address-list-perl \
   libcss-minifier-xs-perl \
