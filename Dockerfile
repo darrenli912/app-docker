@@ -28,8 +28,7 @@ RUN set -ex \
   libhttp-browserdetect-perl \
   libuniversal-require-perl \
   libnet-scp-expect-perl  \
-  libcss-minifier-perl \
-  libjavascript-minifier-perl \
+  libjavascript-minifier-xs-perl \
   libgd-securityimage-perl   \
   libemail-address-list-perl \
   libcss-minifier-xs-perl \
