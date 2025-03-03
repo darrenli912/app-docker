@@ -91,6 +91,7 @@ RUN cpanm   \
   CSS::Sass \
   Mojo::JWT::Google  \
   Authen::SASL  \
+  Mojolicious::Plugin::I18N \
   && rm -r /root/.cpanm
 
   ARG NOW=not-set
