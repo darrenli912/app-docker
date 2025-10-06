@@ -94,6 +94,8 @@ RUN cpanm   \
   Mojolicious::Plugin::I18N \
   Mojolicious::Plugin::I18NUtils \
   YAML::PP \
+  Hash::Fold \
+  Scalar::Util \
   && rm -r /root/.cpanm
 
   ARG NOW=not-set
