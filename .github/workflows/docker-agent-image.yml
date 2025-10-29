@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Agent Image CI
 
 on:
   [workflow_dispatch]
