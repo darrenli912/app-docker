@@ -9,13 +9,12 @@ RUN apt-get update && \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-RUN cpanm Mojo::JWT
+RUN cpanm Mojo::JWT \
+  && rm -r /root/.cpanm
 
-# 清理缓存以减少镜像大小
-RUN cpanm --scandeps --uninstall .
 
 # 设置工作目录
-WORKDIR /app
+WORKDIR /usr/src/app
 
 
 # 暴露端口
