@@ -1,0 +1,24 @@
+FROM tekki/mojolicious:9.42-pg
+
+# 设置环境变量
+ENV PERL_CPANM_OPT="--verbose"
+
+# 更新包索引并安装系统依赖（如果需要）
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN cpanm Mojo::JWT
+
+# 清理缓存以减少镜像大小
+RUN cpanm --scandeps --uninstall .
+
+# 设置工作目录
+WORKDIR /app
+
+
+# 暴露端口
+EXPOSE 3000
+
+CMD ["/bin/bash", "-c"]
