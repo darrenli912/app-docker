@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the APP Docker image
-      run: docker build . --file agent --tag darrenli912/chat
+      run: docker build . --file chat --tag darrenli912/chat
     - name: Push image to docker hub
       run: |
         docker login -u ${{ secrets.DOCKER_ACCOUNT }} -p ${{ secrets.DOCKER_TOKEN }}
